@@ -7,25 +7,50 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- 🔃 Loading screen -->
+  <div id="loadingScreen">
+    <div class="loader"></div>
+    <h1 class="loading-title">Lauren’s Run From Corporate America 🏃‍♀️💼</h1>
+  </div>
 
-  <!-- 🔊 Audio elements -->
+  <!-- 🎮 Character Select -->
+  <div id="characterSelect">
+    <h2>Choose Your Character</h2>
+    <button onclick="selectCharacter('lauren')">Lauren</button>
+    <button onclick="selectCharacter('trevor')">Trevor</button>
+  </div>
+
+  <!-- 🔊 Audio -->
   <audio id="lanaAudio" src="Lana.mp3"></audio>
   <audio id="groanSound" src="groan.mp3"></audio>
   <audio id="hitSound" src="hit.mp3"></audio>
 
+  <!-- 🎯 Game Canvas -->
   <canvas id="gameCanvas" width="800" height="400"></canvas>
 
+  <!-- 🧮 Scoreboard -->
   <div id="scoreBoard">
     🧮 Score: <span id="score">0</span> |
     🏆 High Score: <span id="highScore">0</span>
   </div>
 
+  <!-- 💀 Game Over -->
   <div id="gameOverScreen" class="hidden">
     <h1>💀 Game Over 💀</h1>
     <p>Score: <span id="finalScore"></span></p>
     <button onclick="restartGame()">Try Again</button>
   </div>
 
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loadingScreen').style.display = 'none';
+      }, 3500); // 3.5s loading screen
+    });
+  </script>
+
   <script src="game.js"></script>
 </body>
 </html>
+
+

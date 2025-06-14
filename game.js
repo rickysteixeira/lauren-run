@@ -1,21 +1,22 @@
+// game.js
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Load Lauren's sprite
-const laurenImage = new Image();
-laurenImage.src = 'female_jump.png';
+let selectedCharacter = 'lauren';
+const characterSprites = {
+  lauren: 'female_jump.png',
+  trevor: 'trevor_jump.png'
+};
 
-// Lana mode trigger
-let lanaCode = [];
-const lanaTrigger = ['l', 'a', 'n', 'a'];
-document.addEventListener('keydown', function (e) {
-  lanaCode.push(e.key.toLowerCase());
-  if (lanaCode.length > 4) lanaCode.shift();
-  if (lanaCode.join('') === lanaTrigger.join('')) {
-    activateLaurenMode();
-    lanaCode = [];
-  }
-});
+const characterImage = new Image();
+
+function selectCharacter(name) {
+  selectedCharacter = name;
+  characterImage.src = characterSprites[name];
+  document.getElementById('characterSelect').style.display = 'none';
+  gameLoop();
+}
 
 // Game state
 let laurenY = canvas.height - 40 - 10;
@@ -30,7 +31,6 @@ const groundHeight = 40;
 const groundY = canvas.height - groundHeight - 10;
 
 let obstacles = [];
-let nightShifts = [];
 let targets = [];
 let luigis = [];
 
@@ -47,24 +47,16 @@ function updateScoreDisplay() {
   document.getElementById('highScore').textContent = high;
 }
 
-function jump() {
-  if (!isJumping) {
+document.addEventListener('keydown', function (e) {
+  if (e.code === 'Space' && !isJumping) {
     laurenVelocity = -15;
     isJumping = true;
   }
-}
-
-document.addEventListener('keydown', function (e) {
-  if (e.code === 'Space') jump();
-});
-
-canvas.addEventListener('touchstart', function (e) {
-  e.preventDefault();
-  jump();
 });
 
 function spawnObstacle() {
   const isNightShift = Math.random() < 0.2;
+
   const baseSize = 20;
   const maxExtraSize = Math.min(30, frameCount / 100);
   const size = baseSize + Math.random() * maxExtraSize;
@@ -130,6 +122,7 @@ function gameLoop() {
   if (frameCount % targetFrequency === 0) spawnTarget();
   if (frameCount % luigiFrequency === 0) spawnLuigi();
 
+  // Obstacles
   obstacles.forEach((ob, i) => {
     ob.x -= groundSpeed;
 
@@ -156,6 +149,7 @@ function gameLoop() {
     if (ob.x + ob.width < 0) obstacles.splice(i, 1);
   });
 
+  // Targets
   targets.forEach((t, i) => {
     t.x -= groundSpeed;
     ctx.font = 'bold 24px Arial';
@@ -184,6 +178,7 @@ function gameLoop() {
     if (t.x + t.width < 0) targets.splice(i, 1);
   });
 
+  // Luigi
   luigis.forEach((luigi, i) => {
     luigi.x -= groundSpeed;
     ctx.font = 'bold 20px Arial';
@@ -219,12 +214,14 @@ function gameLoop() {
     if (luigi.x + luigi.width < 0) luigis.splice(i, 1);
   });
 
+  // Ground
   groundX -= groundSpeed;
   if (groundX <= -canvas.width) groundX = 0;
   ctx.fillStyle = '#654321';
   ctx.fillRect(groundX, canvas.height - groundHeight, canvas.width, groundHeight);
   ctx.fillRect(groundX + canvas.width, canvas.height - groundHeight, canvas.width, groundHeight);
 
+  // Player physics
   laurenY += laurenVelocity;
   laurenVelocity += gravity;
   if (laurenY > groundY) {
@@ -233,7 +230,7 @@ function gameLoop() {
     isJumping = false;
   }
 
-  ctx.drawImage(laurenImage, 100, laurenY - 40, 40, 40);
+  ctx.drawImage(characterImage, 100, laurenY - 40, 40, 40);
 
   updateScoreDisplay();
 
@@ -246,31 +243,10 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-function activateLaurenMode() {
-  document.body.classList.add('lauren-mode');
-  const audio = document.getElementById('lanaAudio');
-  audio.volume = 0.5;
-  audio.play();
-
-  const banner = document.createElement('div');
-  banner.textContent = 'Escaped Amazon. Found peace. 💅';
-  banner.style.position = 'absolute';
-  banner.style.top = '10px';
-  banner.style.left = '50%';
-  banner.style.transform = 'translateX(-50%)';
-  banner.style.fontSize = '20px';
-  banner.style.color = '#ff69b4';
-  banner.style.fontWeight = 'bold';
-  banner.style.textShadow = '1px 1px 2px #000';
-  banner.style.zIndex = '999';
-  document.body.appendChild(banner);
-}
-
 function restartGame() {
   gameOver = false;
   frameCount = 0;
   obstacles = [];
-  nightShifts = [];
   targets = [];
   luigis = [];
   laurenY = groundY;
@@ -280,4 +256,3 @@ function restartGame() {
   gameLoop();
 }
 
-gameLoop();
