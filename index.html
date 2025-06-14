@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lauren Run</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 🔊 Audio elements -->
+  <audio id="lanaAudio" src="Lana.mp3"></audio>
+  <audio id="groanSound" src="groan.mp3"></audio>
+  <audio id="hitSound" src="hit.mp3"></audio>
+
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+  <div id="scoreBoard">
+    🧮 Score: <span id="score">0</span> |
+    🏆 High Score: <span id="highScore">0</span>
+  </div>
+
+  <div id="gameOverScreen" class="hidden">
+    <h1>💀 Game Over 💀</h1>
+    <p>Score: <span id="finalScore"></span></p>
+    <button onclick="restartGame()">Try Again</button>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

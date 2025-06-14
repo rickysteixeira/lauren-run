@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+}
+
+canvas {
+  border: 2px solid #333;
+  background: linear-gradient(#c2f0f7, #8ee3ff);
+  display: block;
+  margin-top: 20px;
+}
+
+#gameOverScreen {
+  position: absolute;
+  top: 30%;
+  background: white;
+  border: 2px solid #ccc;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+#scoreBoard {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
+.lauren-mode canvas {
+  filter: hue-rotate(270deg) brightness(1.1) saturate(1.4);
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-5px, 5px); }
+  40% { transform: translate(5px, -5px); }
+  60% { transform: translate(-5px, 5px); }
+  80% { transform: translate(5px, -5px); }
+  100% { transform: translate(0, 0); }
+}
+
+.shake {
+  animation: shake 0.3s ease;
+}
